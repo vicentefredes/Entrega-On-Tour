@@ -33,7 +33,7 @@ class Curso(models.Model):
         return str(self.id_nivel) + " " + str(self.letra_curso) + ", " + str(self.id_colegio)
 
 class Apoderado(models.Model):
-    id_apoderado        = models.AutoField(db_column='idApoderado', primary_key=True)
+    id_apoderado     = models.AutoField(db_column='idApoderado', primary_key=True)
     rut              = models.CharField(max_length=10, null=False)
     nombre           = models.CharField(max_length=20, null=False)
     apellido_paterno = models.CharField(max_length=20, null=False)

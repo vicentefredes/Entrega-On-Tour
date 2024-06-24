@@ -97,14 +97,14 @@ header img {
   text-decoration: underline;
 }
 
-#formCrudAlumnos {
+#formCrud {
   background-color: azure;
   color: rgba(14, 58, 77, 0.836);
   font-family:'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
   font-weight: 500;
 }
 
-#formCrudAlumnos h2 {
+#formCrud h2 {
   font-size: 45px;
   font-weight: bold;
   text-decoration: underline;

@@ -29,11 +29,10 @@
     ></script>
 
     <!-- Mi hoja de estilos CSS -->
-    <link rel="stylesheet" href="{% static 'css/styles.css' %}">
+    <link rel="stylesheet" href="{% static 'css/styles.css' %}" />
 
     <!-- Mi archivo JS -->
     <script src="{% static 'js/main.js' %}"></script>
-
   </head>
 
   <body>
@@ -52,54 +51,61 @@
             </button>
           </div>
         </div>
-      </div>   
+      </div>
     </header>
 
     <div id="idMensajes">
       {% if mensaje %}
-          <div class="alert alert-warning mx-auto">
-              {{ mensaje }}
-          </div>
+      <div class="alert alert-warning mx-auto">{{ mensaje }}</div>
       {% endif %}
     </div>
 
     <div class="table-container">
-        <table class="table table-striped">
-            {% if apoderados %}
-                <thead>
-                    <tr>
-                    <th scope="col">RUT</th>
-                    <th scope="col">Nombre Completo</th>
-                    <th scope="col">Género</th>
-                    <th scope="col">Nacimiento</th>
-                    <th scope="col">E-mail</th>
-                    <th scope="col" colspan="2">Acción</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {% for apoderado in apoderados %}
-                      {% if apoderado.rut %}
-                      <tr>
-                          <td>{{ apoderado.rut }}</td>
-                          <td>{{ apoderado.nombre|capfirst }} {{ apoderado.apellido_paterno|capfirst }} {{ apoderado.apellido_materno|capfirst }}</td>
-                          <td>{{ apoderado.id_genero.genero|slice:":1" }}</td>
-                          <td>{{ apoderado.fecha_nacimiento|date:"d/m/Y" }}</td>
-                          <td>{{ apoderado.email|default_if_none:""|lower }}</td>
-                          <td class="td-update"><a href="{% url 'apoderado_edit' pk=apoderado.id_apoderado %}">Modificar</a></td>
-                          <td class="td-delete"><a href="{% url 'apoderado_del' pk=apoderado.id_apoderado %}">Eliminar</a></td>
-                      </tr>
-                      {% endif %} 
-                    {% endfor %}
-                </tbody>
-            {% endif %}    
-        </table>
+      <table class="table table-striped">
+        {% if apoderados %}
+        <thead>
+          <tr>
+            <th scope="col">RUT</th>
+            <th scope="col">Nombre Completo</th>
+            <th scope="col">Género</th>
+            <th scope="col">Nacimiento</th>
+            <th scope="col">E-mail</th>
+            <th scope="col" colspan="2">Acción</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for apoderado in apoderados %} {% if apoderado.rut %}
+          <tr>
+            <td>{{ apoderado.rut }}</td>
+            <td>
+              {{ apoderado.nombre|capfirst }}
+              {{apoderado.apellido_paterno|capfirst }}
+              {{apoderado.apellido_materno|capfirst }}
+            </td>
+            <td>{{ apoderado.id_genero.genero|slice:":1" }}</td>
+            <td>{{ apoderado.fecha_nacimiento|date:"d/m/Y" }}</td>
+            <td>{{ apoderado.email|default_if_none:""|lower }}</td>
+            <td class="td-update">
+              <a href="{% url 'apoderados_edit' pk=apoderado.id_apoderado %}"
+                >Modificar</a
+              >
+            </td>
+            <td class="td-delete">
+              <a href="{% url 'apoderados_del' pk=apoderado.id_apoderado %}"
+                >Eliminar</a
+              >
+            </td>
+          </tr>
+          {% endif %} {% endfor %}
+        </tbody>
+        {% endif %}
+      </table>
     </div>
 
     <script>
-        $(document).ready(function() {
-            $("#idMensajes").delay(2000).fadeOut("slow");
-        });
+      $(document).ready(function () {
+        $("#idMensajes").delay(2000).fadeOut("slow");
+      });
     </script>
-
   </body>
 </html>
