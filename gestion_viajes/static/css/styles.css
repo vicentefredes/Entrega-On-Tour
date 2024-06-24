@@ -97,6 +97,16 @@ header img {
   text-decoration: underline;
 }
 
+.table-striped .td-crud {
+  background-color: rgba(34, 167, 224, 0.836);
+}
+
+.table-striped .td-crud a {
+  color: white;
+  font-weight: bold;
+  text-decoration: underline;
+}
+
 #formCrud {
   background-color: azure;
   color: rgba(14, 58, 77, 0.836);

@@ -70,7 +70,7 @@
                     <tr>
                     <th scope="col">Curso</th>
                     <th scope="col">Colegio</th>
-                    <th scope="col" colspan="2">Acción</th>
+                    <th scope="col" colspan="4">Acción</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -78,6 +78,8 @@
                         <tr>
                             <td>{{ curso.id_nivel }} {{ curso.letra_curso }}</td>
                             <td>{{ curso.id_colegio }}</td>
+                            <td class="td-crud"><a href="{% url 'crud_alumnos' fk=curso.id_curso %}">Ver Alumnos</a></td> 
+                            <td class="td-crud"><a href="{% url 'crud_apoderados' fk=curso.id_curso %}">Ver Apoderados</a></td>
                             <td class="td-update"><a href="{% url 'cursos_edit' pk=curso.id_curso %}">Modificar</a></td> 
                             <td class="td-delete"><a href="{% url 'cursos_del' pk=curso.id_curso %}">Eliminar</a></td>
                         </tr>

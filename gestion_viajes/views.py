@@ -48,8 +48,8 @@ def colegios_del(request, pk):
     return render(request, 'gestion_viajes/colegios_del.html', {'colegio': colegio})
 
 # CRUD de Cursos
-def crud_cursos(request):
-    cursos = Curso.objects.all().order_by('id_nivel', 'letra_curso')
+def crud_cursos(request, fk):
+    cursos = Curso.objects.filter(id_colegio = fk)
     context = {'cursos': cursos}
     return render(request, 'gestion_viajes/cursos_list.html', context)
 
@@ -86,8 +86,14 @@ def cursos_del(request, pk):
     return render(request, 'gestion_viajes/cursos_del.html', {'curso': curso})
 
 # CRUD de Apoderados
-def crud_apoderados(request):
-    apoderados = Apoderado.objects.all().order_by('apellido_paterno')
+def crud_apoderados(request, fk):
+    # Obtén todos los alumnos del curso especificado por fk
+    alumnos = Alumno.objects.filter(id_curso=fk)
+    
+    # Obtén los apoderados únicos de estos alumnos
+    apoderados_ids = alumnos.values_list('id_apoderado', flat=True).distinct()
+    apoderados = Apoderado.objects.filter(id_apoderado__in=apoderados_ids).order_by('apellido_paterno')
+
     context = {'apoderados': apoderados}
     return render(request, 'gestion_viajes/apoderados_list.html', context)
 
@@ -156,8 +162,8 @@ def apoderados_del(request, pk):
         return render(request, 'gestion_viajes/apoderados_list.html', context)
 
 # CRUD de alumnos
-def crud_alumnos(request):
-    alumnos = Alumno.objects.all().order_by('apellido_paterno')
+def crud_alumnos(request, fk):
+    alumnos = Alumno.objects.filter(id_curso = fk).order_by('apellido_paterno')
     context = {'alumnos':alumnos}
     return render(request, 'gestion_viajes/alumnos_list.html', context)
 
