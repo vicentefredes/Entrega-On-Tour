@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Alumnos</title>
+    <title>Apoderados</title>
 
     <!-- Cargar Static -->
     {% load static %}
@@ -25,11 +25,10 @@
 <body>
     <div class="row justify-content-center">
         <div class="col-lg-8 col-md-10 col-sm-12">
-            <div id="formCrudAlumnos" class="p-4 border rounded">
-                {% if alumno %}
-                <h2 class="text-center">Actualizar datos de {{alumno.nombre}} {{alumno.apellido_paterno}} {{alumno.apellido_materno|slice:":1"}}. : </h2>
+            <div id="formCrudApoderados" class="p-4 border rounded">
+                <h2 class="text-center">Agregar Apoderado: </h2>
                 <br>
-                <form action="" method="POST">
+                <form action="{% url 'apoderadosAdd' %}" method="POST">
                     {% csrf_token %}
                     <div class="form-row">
                         <div class="form-group col-md-6">
@@ -53,10 +52,6 @@
                     </div>
                     <div class="form-row">
                         <div class="form-group col-md-4">
-                            <label for="id_fecha_nacimiento">Fecha de Nacimiento *</label>
-                            {{ form.fecha_nacimiento }}
-                        </div>
-                        <div class="form-group col-md-4">
                             <label for="id_genero">Género *</label>
                             {{ form.id_genero }}
                         </div>
@@ -64,19 +59,19 @@
                             <label for="id_telefono">Teléfono *</label>
                             {{ form.telefono }}
                         </div>
-                    </div>
-                    <div class="form-row">
-                        <div class="form-group col-md-4">
-                            <label for="id_direccion">Dirección</label>
-                            {{ form.direccion }}
-                        </div>
                         <div class="form-group col-md-4">
                             <label for="id_email">E-mail</label>
                             {{ form.email }}
                         </div>
+                    </div>
+                    <div class="form-row justify-content-center">
                         <div class="form-group col-md-4">
-                            <label for="id_id_curso">Curso</label>
-                            {{ form.id_curso }}
+                            <label for="id_fecha_nacimiento">Fecha de Nacimiento *</label>
+                            {{ form.fecha_nacimiento }}
+                        </div>
+                        <div class="form-group col-md-4">
+                            <label for="id_direccion">Dirección</label>
+                            {{ form.direccion }}
                         </div>
                     </div>
                     <div class="form-row justify-content-center">
@@ -84,11 +79,10 @@
                     </div>
                     <br>
                     <div class="form-group text-center">
-                        <button type="submit" class="btn btn-primary" id="btnEnviarForm">Actualizar</button>
-                        <a href="{% url 'crud_alumnos' %}" class="btn btn-secondary" id="btnVolver">Volver</a>
+                        <button type="submit" class="btn btn-primary" id="btnEnviarForm">Agregar</button>
+                        <a href="{% url 'crud_apoderados' %}" class="btn btn-secondary" id="btnVolver">Volver</a>
                     </div>
                 </form>
-                {% endif %}
 
                 <div id="idMensajes">
                     {% if mensaje %}

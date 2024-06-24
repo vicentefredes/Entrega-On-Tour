@@ -32,6 +32,21 @@ class Curso(models.Model):
     def __str__(self):
         return str(self.id_nivel) + " " + str(self.letra_curso) + ", " + str(self.id_colegio)
 
+class Apoderado(models.Model):
+    id_apoderado        = models.AutoField(db_column='idApoderado', primary_key=True)
+    rut              = models.CharField(max_length=10, null=False)
+    nombre           = models.CharField(max_length=20, null=False)
+    apellido_paterno = models.CharField(max_length=20, null=False)
+    apellido_materno = models.CharField(max_length=20, null=False)
+    fecha_nacimiento = models.DateField(blank=False, null=False) 
+    id_genero        = models.ForeignKey('Genero',on_delete=models.CASCADE, db_column='idGenero')  
+    telefono         = models.CharField(max_length=45, null=False)
+    email            = models.EmailField(unique=True, max_length=100, blank=True, null=True)
+    direccion        = models.CharField(max_length=50, blank=True, null=True)  
+
+    def __str__(self):
+        return str(self.nombre)+" "+str(self.apellido_paterno)+" "+str(self.apellido_materno) 
+
 class Alumno(models.Model):
     id_alumno        = models.AutoField(db_column='idAlumno', primary_key=True)
     rut              = models.CharField(max_length=10, null=False)
@@ -44,6 +59,7 @@ class Alumno(models.Model):
     email            = models.EmailField(unique=True, max_length=100, blank=True, null=True)
     direccion        = models.CharField(max_length=50, blank=True, null=True)  
     id_curso         = models.ForeignKey('Curso',on_delete=models.CASCADE, db_column='idCurso')
+    id_apoderado     = models.ForeignKey('Apoderado',on_delete=models.CASCADE, db_column='idApoderado')
 
     def __str__(self):
         return str(self.nombre)+" "+str(self.apellido_paterno)+" "+str(self.apellido_materno) 
