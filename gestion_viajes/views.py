@@ -12,113 +12,59 @@ def index(request):
 #ALUMNOS
 def crud_alumnos(request):
     alumnos = Alumno.objects.all().order_by('apellido_paterno')
-    usuario=request.session["usuario"]
-    context = {'alumnos':alumnos, 'usuario':usuario}
-    return render(request, 'alumnos/alumnos_list.html', context)
+    context = {'alumnos':alumnos}
+    return render(request, 'gestion_viajes/alumnos_list.html', context)
 
 def alumnosAdd(request):
-    if request.method != "POST":
-        generos = Genero.objects.all()
-        context = {"generos": generos}
-        return render(request, 'alumnos/alumnos_add.html', context)
+    if request.method == "POST":
+        form = AlumnoForm(request.POST)
+        if form.is_valid():
+            form.save()
+            nombre = form.cleaned_data.get('nombre')
+            apaterno = form.cleaned_data.get('apellido_paterno')
+            amaterno = form.cleaned_data.get('apellido_materno')
+            id_genero = form.cleaned_data.get('id_genero')
+            objGenero = Genero.objects.get(id_genero=id_genero.id_genero)
+            
+            if objGenero.genero == 'Masculino':
+                mensaje = f"{nombre} {apaterno} {amaterno} ha sido agregado exitosamente"
+            else:
+                mensaje = f"{nombre} {apaterno} {amaterno} ha sido agregada exitosamente"
+            
+            return render(request, 'gestion_viajes/alumnos_add.html', {'form': AlumnoForm(), 'mensaje': mensaje})
     else:
-        rut = request.POST["rut"]
-        nombre = request.POST["nombre"]
-        apaterno = request.POST["apaterno"]
-        amaterno = request.POST["amaterno"]
-        fechaNac = request.POST["fechaNac"]
-        genero = request.POST["genero"]
-        telefono = request.POST["telefono"]
-        email = request.POST["email"]
-        direccion = request.POST["direccion"]
-        activo = "1"
-        
-        objGenero = Genero.objects.get(id_genero=genero)
-
-        obj = Alumno.objects.create(
-            rut=rut,
-            nombre=nombre,
-            apellido_paterno=apaterno,
-            apellido_materno=amaterno,
-            fecha_nacimiento=fechaNac,
-            id_genero=objGenero, # Asociar el genero correctamente
-            telefono=telefono,
-            email=email,
-            direccion=direccion,
-            activo=activo
-            )
-
-        obj.save()
-
-        if objGenero.genero == 'Masculino':
-            mensaje = f"{nombre} {apaterno} {amaterno} ha sido agregado exitosamente"
-        else:
-            mensaje = f"{nombre} {apaterno} {amaterno} ha sido agregada exitosamente"
-
-        context = {'mensaje': mensaje}
-
-        #return redirect('crud')
-        return render(request, 'alumnos/alumnos_add.html', context)
+        form = AlumnoForm()
     
-def alumnos_findEdit(request, pk):
-
-    if pk != "":
+    return render(request, 'gestion_viajes/alumnos_add.html', {'form': form})
+    
+def alumnos_edit(request, pk):
+    try:
         alumno = Alumno.objects.get(id_alumno=pk)
         generos = Genero.objects.all()
 
-        print(type(alumno.id_genero.genero))
-
-        context = {'alumno':alumno, 'generos':generos}
+        context = {}
 
         if alumno:
-            return render(request, 'alumnos/alumnos_edit.html', context)
-        else:
-            mensaje = f"ERROR: el rut {pk} no existe"
-            context = {'mensaje': mensaje}
-            return render(request, 'alumnos/alumnos_list.html', context)
-
-
-def alumnosUpdate(request):
-    if request.method != "POST":
-        alumnos = Alumno.objects.all().order_by('apellido_paterno')
-        context = {'alumnos': alumnos}
-        return render(request, 'alumnos/alumnos_list.html', context)
-    else:
-        rut = request.POST["rut"]
-        nombre = request.POST["nombre"]
-        apaterno = request.POST["apaterno"]
-        amaterno = request.POST["amaterno"]
-        fechaNac = request.POST["fechaNac"]
-        genero = request.POST["genero"]
-        telefono = request.POST["telefono"]
-        email = request.POST["email"]
-        direccion = request.POST["direccion"]
-        activo = "1"
-        
-        objGenero = Genero.objects.get(id_genero = genero)
-
-        alumno = Alumno()
-
-        alumno.rut=rut
-        alumno.nombre=nombre
-        alumno.apellido_paterno=apaterno
-        alumno.apellido_materno=amaterno
-        alumno.fecha_nacimiento=fechaNac
-        alumno.id_genero=objGenero
-        alumno.telefono=telefono
-        alumno.email=email
-        alumno.direccion=direccion
-
-        alumno.save()
+            if request.method == "POST":
+                form = AlumnoForm(request.POST, instance=alumno)
+                if form.is_valid():
+                    form.save()
+                    mensaje = f"Los datos de {alumno.nombre} {alumno.apellido_paterno} {alumno.apellido_materno} han sido actualizados exitosamente"
+                    context = {'alumno': alumno, 'mensaje': mensaje, 'form': form, 'generos': generos}
+                    return render(request, 'gestion_viajes/alumnos_edit.html', context)
+            
+            else:
+                form = AlumnoForm(instance=alumno)
+                mensaje = ""
+                context = {'alumno': alumno, 'mensaje': mensaje, 'form': form, 'generos': generos}
+                return render(request, 'gestion_viajes/alumnos_edit.html', context)
     
-        mensaje = f"Los datos de {nombre} {apaterno} {amaterno} han sido actualizados exitosamente"
+    except Alumno.DoesNotExist:
+        alumnos = Alumno.objects.all().order_by('apellido_paterno')
+        mensaje = f"ERROR: El alumno con ID {pk} no existe"
+        context = {'alumnos': alumnos, 'mensaje': mensaje}
 
-        generos = Genero.objects.all()
-
-        context = {'mensaje': mensaje, 'generos':generos, 'alumno':alumno}
-
-        return render(request, 'alumnos/alumnos_edit.html', context)
-
+    return render(request, 'gestion_viajes/alumnos_list.html', context)
 
 
 def alumnos_del(request, pk):
@@ -136,10 +82,10 @@ def alumnos_del(request, pk):
 
         alumnos = Alumno.objects.all().order_by('apellido_paterno')
         context = {'alumnos': alumnos, 'mensaje': mensaje}
-        return render(request, 'alumnos/alumnos_list.html', context)
+        return render(request, 'gestion_viajes/alumnos_list.html', context)
     
     except:
         mensaje = f"ERROR: el rut {pk} no existe"
         alumnos = Alumno.objects.all().order_by('apellido_paterno')
         context = {'alumnos': alumnos, 'mensaje': mensaje}
-        return render(request, 'alumnos/alumnos_list.html', context)
+        return render(request, 'gestion_viajes/alumnos_list.html', context)
