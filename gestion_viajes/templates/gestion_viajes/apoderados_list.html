@@ -38,17 +38,21 @@
   <body>
     <header>
       <div class="row justify-content-center">
-        <!--<div class="col-md-4 col-sm-12">
-          <img src="{% static 'img/logodeprueba.jpg' %}" alt="logodeprueba">
-        </div>-->
-        <div class="col-md-5 col-sm-12">
-          <h1>Listado de Apoderados</h1>
+        <div class="col-md-8 col-sm-12">
+          <h1>Listado de Apoderados, {{ curso }}</h1>
         </div>
-        <div class="col-md-3 col-sm-12">
+        <div class="col-md-2 col-sm-12">
           <div class="container-btn">
             <button class="btn btn-light" id="btnAgregar">
-              <a href="{% url 'apoderadosAdd' %}">Agregar Apoderado</a>
+              <a href="{% url 'apoderadosAdd' fk=curso.id_curso %}">Agregar Apoderado</a>
             </button>
+          </div>
+        </div>
+        <div class="col-md-2 col-sm-12">
+          <div class="container-btn">
+            <button class="btn btn-light" id="btnAgregar">
+                <a href="{% url 'crud_cursos' fk=curso.id_colegio_id %}">Volver</a>
+              </button>
           </div>
         </div>
       </div>

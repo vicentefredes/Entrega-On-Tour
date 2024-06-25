@@ -18,14 +18,13 @@ class ColegioForm(ModelForm):
 class CursoForm(ModelForm):
     class Meta:
         model = Curso
-        fields = ['id_nivel', 'letra_curso', 'id_colegio']
+        exclude = ['id_colegio']
+        fields = ['id_nivel', 'letra_curso']
         labels = {'id_nivel': "Nivel", 
-                  'letra_curso': "Curso",
-                  'id_colegio': "Colegio"}
+                  'letra_curso': "Curso"}
         widgets = {
             'id_nivel': forms.Select(attrs={'class': 'form-control'}),
             'letra_curso': forms.TextInput(attrs={'class': 'form-control'}),
-            'id_colegio': forms.Select(attrs={'class': 'form-control'}),
         }
 
 class ApoderadoForm(forms.ModelForm):
@@ -60,10 +59,11 @@ class ApoderadoForm(forms.ModelForm):
 class AlumnoForm(ModelForm):
     class Meta:
         model = Alumno
+        exclude = ['id_curso']
         fields = [
             'rut', 'nombre', 'apellido_paterno', 'apellido_materno', 
             'fecha_nacimiento', 'id_genero', 'telefono', 'email', 
-            'direccion', 'id_curso', 'id_apoderado'
+            'direccion', 'id_apoderado'
         ]
         labels = {
             'rut': "RUT",
@@ -75,7 +75,6 @@ class AlumnoForm(ModelForm):
             'telefono': "Teléfono",
             'email': "Email",
             'direccion': "Dirección",
-            'id_curso': "Curso",
             'id_apoderado': 'Apoderado',
         }
         widgets = {
@@ -88,7 +87,6 @@ class AlumnoForm(ModelForm):
             'telefono': forms.TextInput(attrs={'class': 'form-control'}),
             'email': forms.EmailInput(attrs={'class': 'form-control'}),
             'direccion': forms.TextInput(attrs={'class': 'form-control'}),
-            'id_curso': forms.Select(attrs={'class': 'form-control'}),
             'id_apoderado': forms.Select(attrs={'class': 'form-control'}),
         }
 

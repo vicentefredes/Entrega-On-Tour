@@ -40,17 +40,21 @@
   <body>
     <header>
       <div class="row justify-content-center">
-        <!--<div class="col-md-4 col-sm-12">
-          <img src="{% static 'img/logodeprueba.jpg' %}" alt="logodeprueba">
-        </div>-->
-        <div class="col-md-5 col-sm-12">
-          <h1>Listado de Alumnos</h1>
+        <div class="col-md-8 col-sm-12">
+          <h1>Listado de Alumnos, {{ curso }}</h1>
         </div>
-        <div class="col-md-3 col-sm-12">
+        <div class="col-md-2 col-sm-12">
           <div class="container-btn">
             <button class="btn btn-light" id="btnAgregar">
-              <a href="{% url 'alumnosAdd' %}">Agregar Alumno</a>
+              <a href="{% url 'alumnosAdd' fk=curso.id_curso %}">Agregar Alumno</a>
             </button>
+          </div>
+        </div>
+        <div class="col-md-2 col-sm-12">
+          <div class="container-btn">
+            <button class="btn btn-light" id="btnAgregar">
+                <a href="{% url 'crud_cursos' fk=curso.id_colegio_id %}">Volver</a>
+              </button>
           </div>
         </div>
       </div>   
@@ -87,7 +91,7 @@
                           <td>{{ alumno.id_genero.genero|slice:":1" }}</td>
                           <td>{{ alumno.fecha_nacimiento|date:"d/m/Y" }}</td>
                           <td>{{ alumno.email|default_if_none:""|lower }}</td>
-                          <td class="td-update"><a href="{% url 'alumnos_edit' pk=alumno.id_alumno %}">Modificar</a></td>
+                          <td class="td-update"><a href="{% url 'alumnos_edit' pk=alumno.id_alumno fk=curso.id_curso %}">Modificar</a></td>
                           <td class="td-delete"><a href="{% url 'alumnos_del' pk=alumno.id_alumno %}">Eliminar</a></td>
                       </tr>
                       {% endif %} 

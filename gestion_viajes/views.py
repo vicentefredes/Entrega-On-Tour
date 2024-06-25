@@ -1,4 +1,4 @@
-from django.shortcuts import render
+from django.shortcuts import render, get_object_or_404
 from .models import Nivel, Genero, Colegio, Curso, Alumno, Apoderado
 from django.contrib.auth.decorators import login_required
 
@@ -49,33 +49,37 @@ def colegios_del(request, pk):
 
 # CRUD de Cursos
 def crud_cursos(request, fk):
-    cursos = Curso.objects.filter(id_colegio = fk)
-    context = {'cursos': cursos}
+    cursos = Curso.objects.filter(id_colegio = fk).order_by('id_nivel', 'letra_curso')
+    colegio = Colegio.objects.get(id_colegio=fk)
+    context = {'cursos': cursos, 'colegio':colegio}
     return render(request, 'gestion_viajes/cursos_list.html', context)
 
-def cursosAdd(request):
+def cursosAdd(request, fk):
+    colegio = Colegio.objects.get(id_colegio=fk)
     if request.method == "POST":
         form = CursoForm(request.POST)
         if form.is_valid():
-            form.save()
-            curso = form.cleaned_data.get('id_nivel')
-            mensaje = f"Curso {curso} ha sido agregado exitosamente"
-            return render(request, 'gestion_viajes/cursos_add.html', {'form': CursoForm(), 'mensaje': mensaje})
+            curso = form.save(commit=False)
+            curso.id_colegio = colegio
+            curso.save()
+            mensaje = f"Curso {curso.id_nivel} {curso.letra_curso} ha sido agregado exitosamente"
+            return render(request, 'gestion_viajes/cursos_add.html', {'form': CursoForm(), 'mensaje': mensaje, 'colegio': colegio})
     else:
         form = CursoForm()
-    return render(request, 'gestion_viajes/cursos_add.html', {'form': form})
+    return render(request, 'gestion_viajes/cursos_add.html', {'form': form, 'colegio': colegio})
 
-def cursos_edit(request, pk):
+def cursos_edit(request, pk, fk):
+    colegio = Colegio.objects.get(id_colegio=fk)
     curso = Curso.objects.get(id_curso=pk)
     if request.method == "POST":
         form = CursoForm(request.POST, instance=curso)
         if form.is_valid():
             form.save()
             mensaje = f"Los datos del curso {curso} han sido actualizados exitosamente"
-            return render(request, 'gestion_viajes/cursos_edit.html', {'curso': curso, 'mensaje': mensaje, 'form': form})
+            return render(request, 'gestion_viajes/cursos_edit.html', {'curso': curso, 'mensaje': mensaje, 'form': form, 'colegio': colegio})
     else:
         form = CursoForm(instance=curso)
-    return render(request, 'gestion_viajes/cursos_edit.html', {'curso': curso, 'form': form})
+    return render(request, 'gestion_viajes/cursos_edit.html', {'curso': curso, 'form': form, 'colegio': colegio})
 
 def cursos_del(request, pk):
     curso = Curso.objects.get(id_curso=pk)
@@ -87,6 +91,9 @@ def cursos_del(request, pk):
 
 # CRUD de Apoderados
 def crud_apoderados(request, fk):
+
+    curso = Curso.objects.get(id_curso=fk)
+
     # Obtén todos los alumnos del curso especificado por fk
     alumnos = Alumno.objects.filter(id_curso=fk)
     
@@ -94,10 +101,11 @@ def crud_apoderados(request, fk):
     apoderados_ids = alumnos.values_list('id_apoderado', flat=True).distinct()
     apoderados = Apoderado.objects.filter(id_apoderado__in=apoderados_ids).order_by('apellido_paterno')
 
-    context = {'apoderados': apoderados}
+    context = {'apoderados': apoderados, 'curso':curso}
     return render(request, 'gestion_viajes/apoderados_list.html', context)
 
-def apoderadosAdd(request):
+def apoderadosAdd(request, fk):
+    curso = Curso.objects.get(id_curso=fk)
     if request.method == "POST":
         form = ApoderadoForm(request.POST)
         if form.is_valid():
@@ -111,10 +119,10 @@ def apoderadosAdd(request):
                 mensaje = f"{nombre} {apaterno} {amaterno} ha sido agregado exitosamente"
             else:
                 mensaje = f"{nombre} {apaterno} {amaterno} ha sido agregada exitosamente"
-            return render(request, 'gestion_viajes/apoderados_add.html', {'form': ApoderadoForm(), 'mensaje': mensaje})
+            return render(request, 'gestion_viajes/apoderados_add.html', {'form': ApoderadoForm(), 'mensaje': mensaje, 'curso':curso})
     else:
         form = ApoderadoForm()
-    return render(request, 'gestion_viajes/apoderados_add.html', {'form': form})
+    return render(request, 'gestion_viajes/apoderados_add.html', {'form': form, 'curso':curso})
     
 def apoderados_edit(request, pk):
     try:
@@ -164,14 +172,18 @@ def apoderados_del(request, pk):
 # CRUD de alumnos
 def crud_alumnos(request, fk):
     alumnos = Alumno.objects.filter(id_curso = fk).order_by('apellido_paterno')
-    context = {'alumnos':alumnos}
+    curso = Curso.objects.get(id_curso=fk)
+    context = {'alumnos':alumnos, 'curso':curso}
     return render(request, 'gestion_viajes/alumnos_list.html', context)
 
-def alumnosAdd(request):
+def alumnosAdd(request, fk):
+    curso = Curso.objects.get(id_curso=fk)
     if request.method == "POST":
         form = AlumnoForm(request.POST)
         if form.is_valid():
-            form.save()
+            alumno = form.save(commit=False)
+            alumno.id_curso = curso
+            alumno.save()
             nombre = form.cleaned_data.get('nombre')
             apaterno = form.cleaned_data.get('apellido_paterno')
             amaterno = form.cleaned_data.get('apellido_materno')
@@ -183,13 +195,14 @@ def alumnosAdd(request):
             else:
                 mensaje = f"{nombre} {apaterno} {amaterno} ha sido agregada exitosamente"
             
-            return render(request, 'gestion_viajes/alumnos_add.html', {'form': AlumnoForm(), 'mensaje': mensaje})
+            return render(request, 'gestion_viajes/alumnos_add.html', {'form': AlumnoForm(), 'mensaje': mensaje, 'curso':curso})
     else:
         form = AlumnoForm()
     
-    return render(request, 'gestion_viajes/alumnos_add.html', {'form': form})
+    return render(request, 'gestion_viajes/alumnos_add.html', {'form': form, 'curso':curso})
     
-def alumnos_edit(request, pk):
+def alumnos_edit(request, pk, fk):
+    curso = Curso.objects.get(id_curso=fk)
     try:
         alumno = Alumno.objects.get(id_alumno=pk)
         generos = Genero.objects.all()
@@ -202,19 +215,19 @@ def alumnos_edit(request, pk):
                 if form.is_valid():
                     form.save()
                     mensaje = f"Los datos de {alumno.nombre} {alumno.apellido_paterno} {alumno.apellido_materno} han sido actualizados exitosamente"
-                    context = {'alumno': alumno, 'mensaje': mensaje, 'form': form, 'generos': generos}
+                    context = {'alumno': alumno, 'mensaje': mensaje, 'form': form, 'generos': generos, 'curso':curso}
                     return render(request, 'gestion_viajes/alumnos_edit.html', context)
             
             else:
                 form = AlumnoForm(instance=alumno)
                 mensaje = ""
-                context = {'alumno': alumno, 'mensaje': mensaje, 'form': form, 'generos': generos}
+                context = {'alumno': alumno, 'mensaje': mensaje, 'form': form, 'generos': generos, 'curso':curso}
                 return render(request, 'gestion_viajes/alumnos_edit.html', context)
     
     except Alumno.DoesNotExist:
         alumnos = Alumno.objects.all().order_by('apellido_paterno')
         mensaje = f"ERROR: El alumno con ID {pk} no existe"
-        context = {'alumnos': alumnos, 'mensaje': mensaje}
+        context = {'alumnos': alumnos, 'mensaje': mensaje, 'curso':curso}
 
     return render(request, 'gestion_viajes/alumnos_list.html', context)
 

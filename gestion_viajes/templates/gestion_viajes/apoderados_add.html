@@ -40,7 +40,7 @@
         <div id="formCrud" class="p-4 border rounded">
           <h2 class="text-center">Agregar Apoderado:</h2>
           <br />
-          <form action="{% url 'apoderadosAdd' %}" method="POST">
+          <form action="" method="POST">
             {% csrf_token %}
             <div class="form-row">
               <div class="form-group col-md-6">
@@ -95,7 +95,7 @@
                 Agregar
               </button>
               <a
-                href="{% url 'crud_apoderados' %}"
+                href="{% url 'crud_apoderados' fk=curso.id_curso%}"
                 class="btn btn-secondary"
                 id="btnVolver"
                 >Volver</a

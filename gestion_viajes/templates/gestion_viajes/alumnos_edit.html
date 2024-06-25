@@ -90,8 +90,8 @@
                 {{ form.email }}
               </div>
               <div class="form-group col-md-4">
-                <label for="id_id_curso">Curso</label>
-                {{ form.id_curso }}
+                <label for="id_apoderado">Apoderado</label>
+                {{ form.id_apoderado }}
               </div>
             </div>
             <div class="form-row justify-content-center">
@@ -100,10 +100,10 @@
             <br />
             <div class="form-group text-center">
               <button type="submit" class="btn btn-primary" id="btnEnviarForm">
-                Actualizar
+                Agregar
               </button>
               <a
-                href="{% url 'crud_alumnos' %}"
+                href="{% url 'crud_alumnos' fk=curso.id_curso%}"
                 class="btn btn-secondary"
                 id="btnVolver"
                 >Volver</a

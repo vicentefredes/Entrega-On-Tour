@@ -35,35 +35,17 @@
     <script src="{% static 'js/main.js' %}"></script>
   </head>
   <body>
-    <header>
-      <div class="row justify-content-center">
-        <div class="col-md-4 col-sm-12">
-          <img src="{% static 'img/logodeprueba.jpg' %}" alt="logodeprueba" />
-        </div>
-        <div class="col-md-5 col-sm-12">
-          <h1>Agregar Curso</h1>
-        </div>
-        <div class="col-md-3 col-sm-12">
-          <div class="container-btn">
-            <a href="{% url 'crud_cursos' %}" class="btn btn-light"
-              >Volver al Listado</a
-            >
-          </div>
-        </div>
-      </div>
-    </header>
-
     <div class="row justify-content-center">
       <div class="col-lg-8 col-md-10 col-sm-12">
         <div id="formCrud" class="p-4 border rounded">
-          <h2 class="text-center">Agregar Curso:</h2>
-          <br />
+          <h2 class="text-center">Agregar Curso a {{ colegio.nombre_colegio }}:</h2>
+          <br/>
 
           <form action="" method="POST" class="form-horizontal">
             {% csrf_token %}
 
             <div class="form-row justify-content-center">
-              <div class="form-group col-md-5">
+              <div class="form-group col-md-6">
                 {{ form.non_field_errors }}
                 <label for="{{ form.id_nivel.id_for_label }}"
                   >{{ form.id_nivel.label }}</label
@@ -76,18 +58,18 @@
                 >
                 {{ form.letra_curso }} {{ form.letra_curso.errors }}
               </div>
-              <div class="form-group col-md-5">
-                <label for="{{ form.id_colegio.id_for_label }}"
-                  >{{ form.id_colegio.label }}</label
-                >
-                {{ form.id_colegio }} {{ form.id_colegio.errors }}
-              </div>
             </div>
-            <br />
+            <br/>
             <div class="form-group text-center">
               <button type="submit" class="btn btn-primary" id="btnEnviarForm">
                 Agregar
               </button>
+              <a
+                href="{% url 'crud_cursos' fk=colegio.id_colegio %}"
+                class="btn btn-secondary"
+                id="btnVolver"
+                >Volver</a
+              >
             </div>
           </form>
 

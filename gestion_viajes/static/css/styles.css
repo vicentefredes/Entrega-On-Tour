@@ -15,7 +15,7 @@ header h1 {
   margin-bottom: 3%;
   color: azure;
   font-weight: bold;
-  font-size: 60px;
+  font-size: 50px;
   font-family:'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
   text-decoration: underline;
 }
@@ -115,7 +115,7 @@ header img {
 }
 
 #formCrud h2 {
-  font-size: 45px;
+  font-size: 40px;
   font-weight: bold;
   text-decoration: underline;
 }
