@@ -2,7 +2,7 @@ from django import forms
 from .models import Colegio, Curso, Alumno, Apoderado
 
 from django.forms import ModelForm
-from django.contrib.auth.forms import AuthenticationForm
+from django.contrib.auth.forms import AuthenticationForm, UserCreationForm
 
 class ColegioForm(ModelForm):
     class Meta:

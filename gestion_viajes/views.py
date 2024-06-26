@@ -254,3 +254,4 @@ def alumnos_del(request, pk):
         alumnos = Alumno.objects.all().order_by('apellido_paterno')
         context = {'alumnos': alumnos, 'mensaje': mensaje}
         return render(request, 'gestion_viajes/alumnos_list.html', context)
+    

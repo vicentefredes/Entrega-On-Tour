@@ -25,6 +25,26 @@ header img {
   height: auto;
 }
 
+.navbar-brand {
+  padding: 0;
+  margin-right: 0;
+  display: flex;
+  align-items: center;
+}
+
+.navbar-brand .img-fluid {
+  max-width: 150px; 
+  height: auto;
+}
+
+.navbar-nav {
+  margin-left: auto; 
+}
+
+.nav-item {
+  font-size: 20px;
+}
+
 .container-btn {
   text-align: center;
   margin-top: 2%;
