@@ -3,7 +3,35 @@ from .models import Colegio, Curso, Alumno, Apoderado
 
 from django.forms import ModelForm
 from django.contrib.auth.forms import AuthenticationForm, UserCreationForm
+from django.contrib.auth.models import User
 
+class RegistrationForm(UserCreationForm):
+    email = forms.EmailField(max_length=100, help_text='Requerido. Ingresa una dirección de correo válida.')
+
+    class Meta:
+        model = User
+        fields = ('username', 'email', 'password1', 'password2', 'first_name', 'last_name')
+        labels = {
+            'username': 'Nombre de usuario',
+            'email': 'Correo electrónico',
+            'password1': 'Contraseña',
+            'password2': 'Confirmar contraseña',
+            'first_name': 'Nombre',
+            'last_name': 'Apellido',
+        }
+        help_texts = {
+            'username': 'Requerido. 150 caracteres o menos. Letras, dígitos y @/./+/-/_ únicamente.',
+        }
+class UserUpdateForm(ModelForm):
+    class Meta:
+        model = User
+        fields = ('username', 'email', 'first_name', 'last_name')
+        labels = {
+            'username': 'Nombre de usuario',
+            'email': 'Correo electrónico',
+            'first_name': 'Nombre',
+            'last_name': 'Apellido',
+        }
 class ColegioForm(ModelForm):
     class Meta:
         model = Colegio

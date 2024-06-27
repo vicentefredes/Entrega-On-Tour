@@ -42,7 +42,18 @@ header img {
 }
 
 .nav-item {
-  font-size: 20px;
+  font-size: 25px;
+}
+
+.nav-item.active {
+  font-weight: bold;
+}
+
+footer {
+  text-align: center;
+  color: white;
+  margin-top: 5%;
+  margin-bottom: auto;
 }
 
 .container-btn {

@@ -1,0 +1,57 @@
+{% extends "gestion_viajes/base.html" %}
+
+{% block content %}
+
+    <header>
+        <div class="row justify-content-center">
+        <div class="col-md-8 col-sm-12">
+            <h1>Listado de Usuarios</h1>
+        </div>
+        <div class="col-md-4 col-sm-12">
+            <div class="container-btn">
+            <button class="btn btn-light" id="btnAgregar">
+                <a href="{% url 'register' %}">Agregar Usuario</a>
+            </button>
+            </div>
+        </div>
+        </div>   
+    </header>
+
+    <div id="idMensajes">
+        {% if mensaje %}
+            <div class="alert alert-warning mx-auto">
+                {{ mensaje }}
+            </div>
+        {% endif %}
+    </div>
+
+    <div class="table-container">
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th scope="col">Nombre de Usuario</th>
+                    <th scope="col">Correo Electrónico</th>
+                    <th scope="col" colspan="2">Acción</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for user in users %}
+                    <tr>
+                        <td>{{ user.username }}</td>
+                        <td>{{ user.email }}</td>
+                        <td class="td-update"><a href="{% url 'usuarios_edit' pk=user.id %}">Modificar</a></td> 
+                        <td class="td-delete"><a href="{% url 'usuarios_del' pk=user.id %}">Eliminar</a></td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+
+    <script>
+        $(document).ready(function() {
+            $("#idMensajes").delay(2000).fadeOut("slow");
+        });
+    </script>
+
+{% endblock %}
+
