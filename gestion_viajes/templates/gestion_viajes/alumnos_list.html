@@ -43,6 +43,7 @@
                     <th scope="col">Género</th>
                     <th scope="col">Nacimiento</th>
                     <th scope="col">E-mail</th>
+                    <th scope="col">Apoderado</th>
                     <th scope="col" colspan="2">Acción</th>
                     </tr>
                 </thead>
@@ -56,6 +57,7 @@
                           <td>{{ alumno.id_genero.genero|slice:":1" }}</td>
                           <td>{{ alumno.fecha_nacimiento|date:"d/m/Y" }}</td>
                           <td>{{ alumno.email|default_if_none:""|lower }}</td>
+                          <td>{{ alumno.id_apoderado.nombre|default_if_none:""|capfirst }} {{ alumno.id_apoderado.apellido_paterno|default_if_none:""|capfirst }} {{ alumno.id_apoderado.apellido_materno|default_if_none:""|capfirst }}</td>
                           <td class="td-update"><a href="{% url 'alumnos_edit' pk=alumno.id_alumno fk=curso.id_curso %}">Modificar</a></td>
                           <td class="td-delete"><a href="{% url 'alumnos_del' pk=alumno.id_alumno fk=curso.id_curso %}">Eliminar</a></td>
                       </tr>
