@@ -1,0 +1,66 @@
+{% extends "gestion_viajes/base.html" %}
+
+{% load static %}
+
+{% block content %}
+
+<header>
+    <div class="row justify-content-center">
+        <div class="col-md-8 col-sm-12">
+            <h1>Listado de Servicios</h1>
+        </div>
+        <div class="col-md-4 col-sm-12">
+            <div class="container-btn">
+                <button class="btn btn-light" id="btnAgregar">
+                    <a href="{% url 'servicios_add' %}">Agregar Servicio</a>
+                </button>
+            </div>
+        </div>
+    </div>
+</header>
+
+<div id="idMensajes">
+    {% if mensaje %}
+        <div class="alert alert-warning mx-auto">
+            {{ mensaje }}
+        </div>
+    {% endif %}
+</div>
+
+<div class="table-container">
+    <table class="table table-striped">
+        {% if servicios %}
+            <thead>
+                <tr>
+                    <th scope="col">Descripción</th>
+                    <th scope="col">Tipo de Servicio</th>
+                    <th scope="col">Proveedor</th>
+                    <th scope="col">Destino</th>
+                    <th scope="col">Precio</th>
+                    <th scope="col" colspan="2">Acción</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for servicio in servicios %}
+                    <tr>
+                        <td>{{ servicio.descripcion_servicio }}</td>
+                        <td>{{ servicio.id_tiposervicio.descripcion_tiposervicio }}</td>
+                        <td>{{ servicio.id_proveedor.nombre_proveedor }}</td>
+                        <td>{{ servicio.id_destino.nombre_destino }}</td>
+                        <td>${{ servicio.precio_servicio }}</td>
+                        <td class="td-update"><a href="{% url 'servicios_edit' pk=servicio.id_servicio %}">Modificar</a></td>
+                        <td class="td-delete"><a href="{% url 'servicios_del' pk=servicio.id_servicio %}">Eliminar</a></td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        {% endif %}
+    </table>
+</div>
+
+<script>
+    $(document).ready(function() {
+        $("#idMensajes").delay(2000).fadeOut("slow");
+    });
+</script>
+
+{% endblock %}

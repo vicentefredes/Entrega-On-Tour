@@ -1,0 +1,68 @@
+{% extends "gestion_viajes/base.html" %}
+
+{% load static %}
+
+{% block content %}
+  <br>
+  <div class="row justify-content-center">
+    <div class="col-lg-8 col-md-10 col-sm-12">
+      <div id="formCrud" class="p-4 border rounded">
+        <h2 class="text-center">Modificar Servicio:</h2>
+        <br />
+
+        <form action="" method="POST" class="form-horizontal">
+          {% csrf_token %}
+
+          <div class="form-row justify-content-center">
+            <div class="form-group col-md-8">
+              {{ form.non_field_errors }}
+              <label for="{{ form.descripcion_servicio.id_for_label }}">
+                {{ form.descripcion_servicio.label }}
+              </label>
+              {{ form.descripcion_servicio }} {{ form.descripcion_servicio.errors }}
+            </div>
+            <div class="form-group col-md-8">
+              <label for="{{ form.id_tiposervicio.id_for_label }}">
+                {{ form.id_tiposervicio.label }}
+              </label>
+              {{ form.id_tiposervicio }} {{ form.id_tiposervicio.errors }}
+            </div>
+            <div class="form-group col-md-8">
+              <label for="{{ form.id_proveedor.id_for_label }}">
+                {{ form.id_proveedor.label }}
+              </label>
+              {{ form.id_proveedor }} {{ form.id_proveedor.errors }}
+            </div>
+            <div class="form-group col-md-8">
+              <label for="{{ form.id_destino.id_for_label }}">
+                {{ form.id_destino.label }}
+              </label>
+              {{ form.id_destino }} {{ form.id_destino.errors }}
+            </div>
+            <div class="form-group col-md-8">
+              <label for="{{ form.precio_servicio.id_for_label }}">
+                {{ form.precio_servicio.label }}
+              </label>
+              {{ form.precio_servicio }} {{ form.precio_servicio.errors }}
+            </div>
+          </div>
+          <br />
+          <div class="form-group text-center">
+            <button type="submit" class="btn btn-primary" id="btnEnviarForm">
+              Actualizar
+            </button>
+            <a href="{% url 'crud_servicios' %}" class="btn btn-secondary" id="btnVolver">
+              Volver
+            </a>
+          </div>
+        </form>
+
+        <div id="idMensajes">
+          {% if mensaje %}
+            <div class="alert alert-success mx-auto">{{ mensaje }}</div>
+          {% endif %}
+        </div>
+      </div>
+    </div>
+  </div>
+{% endblock %}

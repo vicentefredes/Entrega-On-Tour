@@ -1,10 +1,10 @@
 from django.shortcuts import render, redirect
-from .models import Nivel, Genero, Colegio, Curso, Alumno, Apoderado
+from .models import Nivel, Genero, Colegio, Curso, Alumno, Apoderado, Servicio
 from django.contrib.auth.models import User
 from django.contrib.auth import login, authenticate
 from django.contrib.auth.decorators import login_required
 
-from .forms import ColegioForm, CursoForm, AlumnoForm, ApoderadoForm, RegistrationForm, UserUpdateForm
+from .forms import ColegioForm, CursoForm, AlumnoForm, ApoderadoForm, RegistrationForm, UserUpdateForm, ServicioForm
 # Create your views here.
 
 # Inicio
@@ -27,7 +27,7 @@ def registration_view(request):
             return redirect('crud_usuarios')
     else:
         form = RegistrationForm()
-    return render(request, 'registration/register.html', {'form': form})
+    return render(request, 'registration/register.html', {'form': form, 'clase':'gestion_usuarios'})
 
 @login_required
 def crud_usuarios(request):
@@ -354,3 +354,49 @@ def alumnos_del(request, pk, fk):
         context = {'alumnos': alumnos, 'mensaje': mensaje, 'curso':curso, 'clase':'gestion_clientes'}
         return render(request, 'gestion_viajes/alumnos_list.html', context)
     
+@login_required
+def crud_servicios(request):
+    servicios = Servicio.objects.all().order_by('descripcion_servicio')
+    context = {'servicios': servicios, 'clase':'gestion_contratos'}
+    return render(request, 'gestion_viajes/servicios_list.html', context)
+
+@login_required
+def servicios_add(request):
+    if request.method == "POST":
+        form = ServicioForm(request.POST)
+        if form.is_valid():
+            form.save()
+            descripcion = form.cleaned_data.get('descripcion_servicio')
+            mensaje = f"{descripcion} ha sido agregado exitosamente"
+            return render(request, 'gestion_viajes/servicios_add.html', {'form': ServicioForm(), 'mensaje': mensaje, 'clase':'gestion_contratos'})
+    else:
+        form = ServicioForm()
+    return render(request, 'gestion_viajes/servicios_add.html', {'form': form, 'clase':'gestion_contratos'})
+
+@login_required
+def servicios_edit(request, pk):
+    servicio = Servicio.objects.get(id_servicio=pk)
+    if request.method == "POST":
+        form = ServicioForm(request.POST, instance=servicio)
+        if form.is_valid():
+            form.save()
+            mensaje = f"Los datos de {servicio.descripcion_servicio} han sido actualizados exitosamente"
+            return render(request, 'gestion_viajes/servicios_edit.html', {'servicio': servicio, 'mensaje': mensaje, 'form': form, 'clase':'gestion_contratos'})
+    else:
+        form = ServicioForm(instance=servicio)
+    return render(request, 'gestion_viajes/servicios_edit.html', {'servicio': servicio, 'form': form, 'clase':'gestion_contratos'})
+
+@login_required
+def servicios_del(request, pk):
+    context = {}
+    try:
+        servicio = Servicio.objects.get(id_servicio=pk)
+        servicio.delete()
+        mensaje = f"{servicio.descripcion_servicio} ha sido eliminado"
+        context = {'mensaje': mensaje, 'servicios': Servicio.objects.all().order_by('descripcion_servicio'), 'clase':'gestion_contratos'}
+        return render(request, 'gestion_viajes/servicios_list.html', context)
+    except Servicio.DoesNotExist:
+        mensaje = f"ERROR: el id {pk} no existe"
+        context = {'mensaje': mensaje, 'servicios': Servicio.objects.all().order_by('descripcion_servicio'), 'clase':'gestion_contratos'}
+        return render(request, 'gestion_viajes/servicios_list.html', context)
+

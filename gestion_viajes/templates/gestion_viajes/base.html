@@ -55,8 +55,14 @@
             {% if clase == 'gestion_clientes' %}<li class="nav-item active">{% else %}<li class="nav-item">{% endif %}
               <a class="nav-link" href="{% url 'crud_colegios' %}">Gestión de Clientes</a>
             </li>
-            <li class="nav-item">
-                <a class="nav-link disabled" href="#">Gestión de Contratos</a>
+            {% if clase == 'gestion_contratos' %}<li class="nav-item dropdown active">{% else %}<li class="nav-item dropdown">{% endif %}
+                <a class="nav-link dropdown-toggle" href="#"  id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                  Gestión de Contratos
+                </a>
+                <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                  <a class="dropdown-item" href="{% url 'crud_servicios' %}">Mantenedor de Servicios</a>
+                  <a class="dropdown-item disables" href="#">Mantenedor de Contratos</a>
+                </div>
             </li>
             <li class="nav-item">
               <a class="nav-link disabled" href="#">Gestión de Pagos</a>

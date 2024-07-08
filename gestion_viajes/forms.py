@@ -1,5 +1,5 @@
 from django import forms
-from .models import Colegio, Curso, Alumno, Apoderado
+from .models import Colegio, Curso, Alumno, Apoderado, Servicio
 
 from django.forms import ModelForm
 from django.contrib.auth.forms import AuthenticationForm, UserCreationForm
@@ -118,4 +118,22 @@ class AlumnoForm(ModelForm):
             'id_apoderado': forms.Select(attrs={'class': 'form-control'}),
         }
 
+class ServicioForm(ModelForm):
+    class Meta:
+        model = Servicio
+        fields = ['descripcion_servicio', 'id_tiposervicio', 'id_proveedor', 'id_destino', 'precio_servicio']
+        labels = {
+            'descripcion_servicio': 'Descripción del Servicio',
+            'id_tiposervicio': 'Tipo de Servicio',
+            'id_proveedor': 'Proveedor',
+            'id_destino': 'Destino',
+            'precio_servicio': 'Precio',
+        }
+        widgets = {
+            'descripcion_servicio': forms.TextInput(attrs={'class': 'form-control'}),
+            'id_tiposervicio': forms.Select(attrs={'class': 'form-control'}),
+            'id_proveedor': forms.Select(attrs={'class': 'form-control'}),
+            'id_destino': forms.Select(attrs={'class': 'form-control'}),
+            'precio_servicio': forms.NumberInput(attrs={'class': 'form-control'}),
+        }
         

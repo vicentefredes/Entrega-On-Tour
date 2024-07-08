@@ -63,3 +63,36 @@ class Alumno(models.Model):
 
     def __str__(self):
         return str(self.nombre)+" "+str(self.apellido_paterno)+" "+str(self.apellido_materno) 
+    
+class Proveedor(models.Model):
+    id_proveedor     = models.AutoField(db_column='idProveedor', primary_key=True)
+    nombre_proveedor = models.CharField(max_length=30, null=False)
+    email_proveedor  = models.EmailField(unique=True, max_length=100, blank=True, null=True)
+    telefono         = models.CharField(max_length=45, null=True)
+
+    def __str__(self):
+        return str(self.nombre_proveedor)
+
+class TipoServicio(models.Model):
+    id_tiposervicio = models.AutoField(db_column='idTipoServicio', primary_key=True)
+    descripcion_tiposervicio = models.CharField(max_length=30, null=False)
+
+    def __str__(self):
+        return str(self.descripcion_tiposervicio)
+
+class Destino (models.Model):
+    id_destino = models.AutoField(db_column='idDestino', primary_key=True)
+    nombre_destino = models.CharField(max_length=100, null=False)
+
+    def __str__(self):
+        return str(self.nombre_destino)
+class Servicio(models.Model):
+    id_servicio = models.AutoField(db_column='idServicio', primary_key=True)
+    descripcion_servicio = models.CharField(max_length=50, null=False)
+    id_tiposervicio = models.ForeignKey('TipoServicio',on_delete=models.CASCADE, db_column='idTipoServicio')  
+    id_proveedor = models.ForeignKey('Proveedor',on_delete=models.CASCADE, db_column='idProveedor')
+    id_destino = models.ForeignKey('Destino',on_delete=models.CASCADE, db_column='idDestino')
+    precio_servicio = models.IntegerField(null=False)
+
+    def __str__(self):
+        return str(self.descripcion_servicio)
